@@ -8,14 +8,14 @@ import {
   View,
   Navigator,
   AsyncStorage,
-  TouchableHighlight,
-  TouchableOpacity
+  TouchableOpacity,
+  TouchableHighlight
 } from 'react-native';
+
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
 import CheckBox from 'react-native-check-box'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './styles/homeStyles.js';
-
 class Home extends Component {
 	navigate(routeName){
 		this.props.navigator.push({
@@ -29,18 +29,18 @@ class Home extends Component {
 			basic: true,
 			listViewData: Array(20).fill('').map((_,i)=>`item #${i}`)
 		};
+		this.renderRow = this.renderRow.bind(this);      
 	}
 
 	componentWillMount(){
+		// var array = [{task: 'lol'},{task: 'haha'},{task: 'wow'},{task: 'test'},{task: 'huhu'}];
+	 //    this.setState({
+	 //      dataSource: this.state.dataSource.cloneWithRows(array),  
+	 //    });
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-	}
-	deleteRow(secId, rowId, rowMap) {
-		rowMap[`${secId}${rowId}`].closeRow();
-		const newData = [...this.state.listViewData];
-		newData.splice(rowId, 1);
-		this.setState({listViewData: newData});
+
 	}
 
 	render() {
@@ -77,10 +77,8 @@ class Home extends Component {
 								    style={{padding: 10}}
 								    onClick={()=>this.onClick(data)}
 								    isChecked={false}
+								    leftText={'I am {data} in a SwipeListView'}
 								/>
-								<View>
-									<Text>I am {data} in a SwipeListView</Text>
-								</View>
 							</View>				
 							</TouchableHighlight>
 						)}
@@ -137,6 +135,29 @@ class Home extends Component {
         </View>
 	  	);
 	}	
+
+	renderRow(data){
+		return (
+			<CheckBox
+			    style={{padding: 10}}
+			    onClick={()=>this.onClick(data.task)}
+			    isChecked={false}
+			    rightText={data.task}
+			/>
+		);
+	}
+
+    onClick(data) {
+        data.checked = !data.checked;
+    }
+
+	deleteRow(secId, rowId, rowMap) {
+		rowMap[`${secId}${rowId}`].closeRow();
+		const newData = [...this.state.listViewData];
+		newData.splice(rowId, 1);
+		this.setState({listViewData: newData});
+	}
+
 }
 
 module.exports = Home;
