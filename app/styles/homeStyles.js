@@ -60,11 +60,9 @@ justifyContent:'center',
     color: '#FFF'
   },
   rowFront: {
-    alignItems: 'center',
     backgroundColor: 'white',
     borderBottomColor: 'black',
     borderBottomWidth: 1,
-    justifyContent: 'center',
     height: 50,
   },
   rowBack: {

@@ -24,19 +24,17 @@ class Home extends Component {
 	}
 	constructor(props){
 		super(props);
-		this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		this.state = {
-			basic: true,
-			listViewData: Array(20).fill('').map((_,i)=>`item #${i}`)
+	        dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
 		};
 		this.renderRow = this.renderRow.bind(this);      
 	}
 
 	componentWillMount(){
-		// var array = [{task: 'lol'},{task: 'haha'},{task: 'wow'},{task: 'test'},{task: 'huhu'}];
-	 //    this.setState({
-	 //      dataSource: this.state.dataSource.cloneWithRows(array),  
-	 //    });
+		var array = [{task: 'lol'},{task: 'haha'},{task: 'wow'},{task: 'test'},{task: 'huhu'}];
+	    this.setState({
+	      dataSource: this.state.dataSource.cloneWithRows(array),  
+	    });
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -60,77 +58,23 @@ class Home extends Component {
             </View>
           </View>
           
-          <View style={styles.bottomContainer}>
-			 {
-					this.state.basic &&
-
-					<SwipeListView
-						dataSource={this.ds.cloneWithRows(this.state.listViewData)}
-						renderRow={ data => (
-							<TouchableHighlight
-								onPress={ _ => console.log('You touched me') }
-								style={styles.rowFront}
-								underlayColor={'#AAA'}
-							>
-							<View>
-								<CheckBox
-								    style={{padding: 10}}
-								    onClick={()=>this.onClick(data)}
-								    isChecked={false}
-								    leftText={'I am {data} in a SwipeListView'}
-								/>
-							</View>				
-							</TouchableHighlight>
-						)}
-						renderHiddenRow={ (data, secId, rowId, rowMap) => (
-							<View style={styles.rowBack}>
-								<Text>Action</Text>
-								<View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
-									<Text style={styles.backTextWhite}>Edit</Text>
-								</View>
-								<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this.deleteRow(secId, rowId, rowMap) }>
-									<Text style={styles.backTextWhite}>Delete</Text>
-								</TouchableOpacity>
-							</View>
-						)}
-						leftOpenValue={75}
-						rightOpenValue={-150}
-					/>
-				}
-
-				{
-					!this.state.basic &&
-
-					<SwipeListView
-						dataSource={this.ds.cloneWithRows(this.state.listViewData)}
-						renderRow={ (data, secId, rowId, rowMap) => (
-							<SwipeRow
-								disableLeftSwipe={parseInt(rowId) % 2 === 0}
-								leftOpenValue={20 + Math.random() * 150}
-								rightOpenValue={-150}
-							>
-								<View style={styles.rowBack}>
-									<Text>Left</Text>
-									<View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
-										<Text style={styles.backTextWhite}>Right</Text>
-									</View>
-									<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this.deleteRow(secId, rowId, rowMap) }>
-										<Text style={styles.backTextWhite}>Delete</Text>
-									</TouchableOpacity>
-								</View>
-								<TouchableHighlight
-									onPress={ _ => console.log('You touched me') }
-									style={styles.rowFront}
-									underlayColor={'#AAA'}
-								>
-									<View>
-										<Text>I am {data} in a SwipeListView</Text>
-									</View>
-								</TouchableHighlight>
-							</SwipeRow>
-						)}
-					/>
-				}
+          <View style={styles.bottomContainer} >
+				<SwipeListView
+				dataSource={this.state.dataSource}
+				renderRow={(rowData) => this.renderRow(rowData)}
+				renderHiddenRow={ data => (
+					<View style={styles.rowBack}>
+						<View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
+							<Text style={styles.backTextWhite}>Edit</Text>
+						</View>
+						<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this.deleteRow(secId, rowId, rowMap) }>
+							<Text style={styles.backTextWhite}>Delete</Text>
+						</TouchableOpacity>
+					</View>
+				)}
+				leftOpenValue={0}
+				rightOpenValue={-150}
+				/>		
           </View>
         </View>
 	  	);
@@ -138,12 +82,15 @@ class Home extends Component {
 
 	renderRow(data){
 		return (
-			<CheckBox
-			    style={{padding: 10}}
-			    onClick={()=>this.onClick(data.task)}
-			    isChecked={false}
-			    rightText={data.task}
-			/>
+
+			<View style={styles.rowFront}>
+				<CheckBox
+				    style={{padding: 10}}
+				    onClick={()=>this.onClick(data.task)}
+				    isChecked={false}
+				    rightText={data.task}
+				/>
+			</View>
 		);
 	}
 
