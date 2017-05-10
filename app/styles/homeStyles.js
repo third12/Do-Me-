@@ -21,7 +21,7 @@ var styles = StyleSheet.create({
 
   top1: {
     flex: 1,
-justifyContent:'center',
+    justifyContent:'center',
     flexDirection: 'row',
   },
 
@@ -48,6 +48,10 @@ justifyContent:'center',
     paddingLeft: 10,
     marginTop: 12,
   },
+  caretIcon: {
+    paddingRight: 10,
+    marginTop: 12,
+  },
 
   homeText: {
     fontWeight: 'bold',
@@ -62,7 +66,6 @@ justifyContent:'center',
   rowFront: {
     backgroundColor: 'white',
     borderBottomColor: 'black',
-    borderBottomWidth: 1,
     height: 50,
   },
   rowBack: {

@@ -11,6 +11,7 @@ import {
 
 import Home from './Home.js';
 import EditTask from './EditTask.js';
+import Add from './Add.js';
 
 export default class DoMe extends Component {
 
@@ -54,6 +55,9 @@ export default class DoMe extends Component {
     }
     if(route.name == 'EditTask') {
       return <EditTask navigator={navigator} />
+    }
+    if(route.name == 'add') {
+      return <Add navigator={navigator} />
     }
   }
 }
