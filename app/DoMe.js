@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 import Home from './Home.js';
+import EditTask from './EditTask.js';
 
 export default class DoMe extends Component {
 
@@ -48,13 +49,13 @@ export default class DoMe extends Component {
 
   renderScene(route, navigator) {
     console.log(route);
-    if(route.name == 'scrollableTab') {
-      return <Home navigator={navigator}/>
-    }
     if(route.name == 'Home') {
-      return <Home navigator={navigator}/>
+      return <Home navigator={navigator} />
+    }
+    if(route.name == 'EditTask') {
+      return <EditTask navigator={navigator} />
     }
   }
 }
 
-module.exports = Home;
+module.exports = DoMe;
