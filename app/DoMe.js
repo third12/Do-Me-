@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import {
   AppRegistry,
+  AsyncStorage,
   BackAndroid,
   StyleSheet,
   Text,
@@ -18,6 +19,10 @@ export default class DoMe extends Component {
   constructor(props){
     super(props);
     this.navigator = null;
+    this.state = {
+      tasks: null,
+      categories: JSON.stringify([]),
+    }
 
     this.handleBack = (() => {
       console.log(this.navigator.getCurrentRoutes());
@@ -28,10 +33,41 @@ export default class DoMe extends Component {
 
       return false; //close the app
     }).bind(this)
+
+    this.saveCategory = this.saveCategory.bind(this);      
+    this.getTasks = this.getTasks.bind(this);      
+    this.getCategories = this.getCategories.bind(this);      
   }
 
   componentDidMount() {
     BackAndroid.addEventListener('hardwareBackPress', this.handleBack);
+    console.log('lol');
+    AsyncStorage.getItem('data').then((value) => {
+      if(value){
+        this.setState({
+          'tasks': value,
+        })
+      }else{
+      console.log('value');
+        this.setState({
+          'tasks': JSON.stringify([{task:'lol',datetime:'14/23/2013',priority:'3',category:'Acads',notes:'lol',status:'completed'}]),
+        })        
+        console.log(this.state.tasks);
+      }
+    });
+
+    AsyncStorage.getItem('categorydata').then((value) => {
+      // console.log(value);
+      if(value){
+        this.setState({
+          'categories': value,
+        })
+      }else{
+        this.setState({
+          'categories': JSON.stringify([]),
+        })        
+      }
+    });
   }
 
   componentWillUnmount() {
@@ -51,7 +87,7 @@ export default class DoMe extends Component {
   renderScene(route, navigator) {
     console.log(route);
     if(route.name == 'Home') {
-      return <Home navigator={navigator} />
+      return <Home navigator={navigator} getTasks={this.getTasks} />
     }
     if(route.name == 'EditTask') {
       return <EditTask navigator={navigator} />
@@ -60,6 +96,26 @@ export default class DoMe extends Component {
       return <Add navigator={navigator} />
     }
   }
+
+  getTasks(){
+    return this.state.tasks;
+  }
+
+  getCategories(){
+    return this.state.categories;
+  }
+
+  saveCategory(category){
+    let categories = this.state.categories;
+    categories = JSON.parse(categories);
+    categories.push(category);
+    // console.log(category);
+    AsyncStorage.setItem('categorydata', JSON.stringify(categories));
+    this.setState({
+      categories:JSON.stringify(categories),
+    });
+  }
+
 }
 
 module.exports = DoMe;

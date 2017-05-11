@@ -27,20 +27,31 @@ class Home extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
+			tasks: null,
 	        dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
 		};
 		this.renderRow = this.renderRow.bind(this);      
 	}
 
 	componentWillMount(){
+		var array = JSON.parse(this.props.getTasks());
+		console.log(array);
 		var array = [{task: 'lol'},{task: 'haha'},{task: 'wow'},{task: 'test'},{task: 'huhu'}];
 	    this.setState({
-	      dataSource: this.state.dataSource.cloneWithRows(array),  
+			tasks: this.props.getTasks(),
+			dataSource: this.state.dataSource.cloneWithRows(array),  
 	    });
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-
+	    if(this.state.tasks!=this.props.getTasks()){
+			var array = JSON.parse(this.props.getTasks());
+			console.log(array);
+		    this.setState({
+				tasks: this.props.getTasks(),
+				dataSource: this.state.dataSource.cloneWithRows(array),  
+		    });
+		}
 	}
 
 	render() {
