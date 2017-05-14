@@ -25,6 +25,10 @@ export default class EditTask extends Component {
 	}
 	constructor(props){
 		super(props);
+		console.log(this.props.data);
+		this.state = {
+			data: this.props.data,
+		};
 	}
 	render(){
 		return(
@@ -46,6 +50,7 @@ export default class EditTask extends Component {
 						<TextInput
 							underlineColorAndroid="transparent"
 							style={addStyle.TextInput}
+							value={this.state.data.task}
 						 />	
 						<TouchableOpacity onPress={this.navigate.bind(this, "chooseCategory")}>
 							<View style={addStyle.CategoryPicker}>
@@ -71,7 +76,14 @@ export default class EditTask extends Component {
 								</View>
 							</View>
 						</TouchableOpacity>													 			 						 
-					</View>			
+					</View>
+					<View style={styles.button}>
+						<Button
+						onPress={()=>this.props.editTasks('lol')}
+						title="Save"
+						color="grey"
+						/>
+					</View>				
 				</View>
 			</View>
 		);
