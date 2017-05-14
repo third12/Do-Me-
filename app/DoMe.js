@@ -36,6 +36,7 @@ export default class DoMe extends Component {
 
     this.saveCategory = this.saveCategory.bind(this);      
     this.getTasks = this.getTasks.bind(this);      
+    this.editTasks = this.editTasks.bind(this);      
     this.getCategories = this.getCategories.bind(this);      
   }
 
@@ -50,7 +51,7 @@ export default class DoMe extends Component {
       }else{
       console.log('value');
         this.setState({
-          'tasks': JSON.stringify([{task:'lol',datetime:'14/23/2013',priority:'3',category:'Acads',notes:'lol',status:'completed'}]),
+          'tasks': JSON.stringify([{key:1,task:'lol',datetime:'14/23/2013',priority:'3',category:'Acads',notes:'lol',status:'completed'},{key:2,task:'lole',datetime:'14/23/2013',priority:'3',category:'Acads',notes:'lol',status:'completed'}]),
         })        
         console.log(this.state.tasks);
       }
@@ -90,7 +91,8 @@ export default class DoMe extends Component {
       return <Home navigator={navigator} getTasks={this.getTasks} />
     }
     if(route.name == 'EditTask') {
-      return <EditTask navigator={navigator} />
+      // console.log(route.data);
+      return <EditTask navigator={navigator} data={route.data} editTasks={this.editTasks}/>
     }
     if(route.name == 'add') {
       return <Add navigator={navigator} />
@@ -99,6 +101,10 @@ export default class DoMe extends Component {
 
   getTasks(){
     return this.state.tasks;
+  }
+
+  editTasks(data){
+    console.log(data);
   }
 
   getCategories(){

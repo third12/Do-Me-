@@ -19,9 +19,10 @@ import CheckBox from 'react-native-check-box'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './styles/homeStyles.js';
 class Home extends Component {
-	navigate(routeName){
+	navigate(routeName,data){
 		this.props.navigator.push({
 			name: routeName,
+			data: data,
 		});
 	}
 	constructor(props){
@@ -34,13 +35,13 @@ class Home extends Component {
 	}
 
 	componentWillMount(){
-		var array = JSON.parse(this.props.getTasks());
-		console.log(array);
-		var array = [{task: 'lol'},{task: 'haha'},{task: 'wow'},{task: 'test'},{task: 'huhu'}];
-	    this.setState({
-			tasks: this.props.getTasks(),
-			dataSource: this.state.dataSource.cloneWithRows(array),  
-	    });
+		if(this.props.getTasks()!=null){
+			var array = JSON.parse(this.props.getTasks());
+		    this.setState({
+				tasks: this.props.getTasks(),
+				dataSource: this.state.dataSource.cloneWithRows(array),  
+		    });
+		}
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -97,10 +98,10 @@ class Home extends Component {
 				renderRow={(rowData) => this.renderRow(rowData)}
 				renderHiddenRow={ data => (
 					<View style={styles.rowBack}>
-						<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnLeft]} onPress={this.navigate.bind(this, "EditTask")}>
+						<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnLeft]} onPress={this.navigate.bind(this, "EditTask",data)}>
 							<Text style={styles.backTextWhite}>Edit</Text>
 						</TouchableOpacity>
-						<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this.deleteRow(secId, rowId, rowMap) }>
+						<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={()=> this.deleteRow(data) }>
 							<Text style={styles.backTextWhite}>Delete</Text>
 						</TouchableOpacity>
 					</View>
@@ -132,11 +133,8 @@ class Home extends Component {
         data.checked = !data.checked;
     }
 
-	deleteRow(secId, rowId, rowMap) {
-		rowMap[`${secId}${rowId}`].closeRow();
-		const newData = [...this.state.listViewData];
-		newData.splice(rowId, 1);
-		this.setState({listViewData: newData});
+	deleteRow(data) {
+		console.log(data.key)
 	}
 
 }
