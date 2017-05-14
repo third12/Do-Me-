@@ -6,7 +6,7 @@ import {
 
 var addStyle = StyleSheet.create({
 	TextInputContainer: {
-		flex: 1,
+		flex: 5,
 		flexDirection: 'column',
 		marginTop: 10,
 		marginBottom: 10,
@@ -19,8 +19,17 @@ var addStyle = StyleSheet.create({
 		marginTop: 10,
 		marginBottom: 10,
 		height: 35,
-		lineHeight: 25,
 		color: 'grey',
+	},
+	Description: {
+		borderWidth: 1,
+		borderColor: 'black',
+		marginLeft: 10,
+		marginRight: 10,
+		marginTop: 10,
+		marginBottom: 10,
+		height: 35,
+		color: 'grey',		
 	},
 	CategoryPicker: {
 		borderWidth: 1,
@@ -30,7 +39,7 @@ var addStyle = StyleSheet.create({
 		marginLeft: 10,
 		marginRight: 10,
 		marginTop: 10,
-		marginBottom: 10,		
+		marginBottom: 20,		
 		height: 35
 	},
 	TextCategory: {
@@ -39,6 +48,44 @@ var addStyle = StyleSheet.create({
 	},
 	rightArrow: {
 		color: '#55b7e5',
+	},
+	priorityContainer: {
+		marginTop: 20,
+		flex: 1,
+		flexDirection: 'row',
+	},
+	priorityText: {
+		marginLeft: 15,
+		marginTop: 7,
+		flex: 2,
+	},
+	buttonGroupContainer: {
+		flex: 2,
+	},
+	noteContainer: {
+		flex: 6,
+	},
+	header1: {
+		flex: 1,
+		alignItems: 'flex-start',
+	},
+	dateTimeContainer: {
+		flex: 1,
+		flexDirection: 'column',
+	},
+	switchContainer: {
+		flex: 2,
+		alignItems: 'flex-start',
+		marginLeft: 10,
+	},
+	dateText: {
+		marginLeft: 5,
+	},
+	datePicker: {
+		flex: 2,
+		alignItems: 'flex-end',
+		marginBottom: 25,
+		marginRight: 10,
 	},
 });
 
