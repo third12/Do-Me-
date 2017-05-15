@@ -1,36 +1,107 @@
 import React, { Component } from 'react';
 import {
-  Text,
-  StyleSheet,
-  View,
-  Navigator,
-  Picker,
-  TextInput,
-  TouchableOpacity,
-  Button,
-  AsyncStorage,
-  Alert,
+	AppRegistry,
+	StyleSheet,
+	ListView,
+	Text,
+	View,
+	Navigator,
+	Switch,
+	Platform,
+	AsyncStorage,
+	TouchableOpacity,
+	TouchableHighlight,
+	TextInput
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './styles/homeStyles.js';
 import addStyle from './styles/addStyles.js';
+import DatePicker from 'react-native-datepicker'
+import moment from 'moment';
+import { Button, ButtonGroup } from 'react-native-elements';
 
-
-export default class EditTask extends Component {
+export default class EditTask extends Component{
 	navigate(routeName){
 		this.props.navigator.push({
-			name: routeName
+			name: routeName,
+			setCategory: this.setCategory,
 		});
 	}
 	constructor(props){
 		super(props);
-		console.log(this.props.data);
 		this.state = {
-			data: this.props.data,
-		};
+			selectedIndex: parseInt(this.props.data.priority),
+			chosenCategory: this.props.data.category,
+			doMe: this.props.data.task,
+			text: this.props.data.notes,
+			height: 0,
+			dateSelected: this.props.data.datetime,
+			date: this.props.data.datetime,
+			falseSwitchIsOn: false,	
+			dateDisabled: true,
+			buttonDisabled: false,
+		}
+		this.switchChange = this.switchChange.bind(this);
+		this.updateIndex = this.updateIndex.bind(this);
+		this.setCategory = this.setCategory.bind(this);
+		this.setText = this.setText.bind(this);
+		this.addTask = this.addTask.bind(this);
+		this.setDate = this.setDate.bind(this);
 	}
+
+	updateIndex (selectedIndex) {
+		this.setState({selectedIndex})
+		console.log(selectedIndex);
+	}
+
+	switchChange(value){
+		this.setState({falseSwitchIsOn:value});
+		if(value == true){
+			this.setState({dateSelected: this.state.date});			
+			this.setState({dateDisabled: false});
+		}
+		else{
+			this.setState({dateSelected: ' '});	
+			this.setState({dateDisabled: true});
+		}
+	}
+
+	setCategory(item){
+		this.setState({chosenCategory: item});
+	}
+
+	setText(text){
+		if(text.length == 0){
+			this.setState({buttonDisabled: true});
+		}
+		else{
+			this.setState({doMe: text});
+			this.setState({buttonDisabled: false});
+		}
+	}
+
+	setDate(date){
+		this.setState({date: date});
+		this.setState({dateSelected: date});
+	}
+
+	addTask(){
+		task = {
+			key: this.props.data.key,
+			task: this.state.doMe,
+			category: this.state.chosenCategory,
+			dateTime: this.state.dateSelected,
+			priority: this.state.selectedIndex,
+			status: "Incomplete",
+		}
+		console.log(task);
+		this.props.navigator.pop();
+	}
+
 	render(){
+		const buttons = ['!', '!!', '!!!'];
+		const { selectedIndex } = this.state;
 		return(
 			<View style={styles.parent}>
 				<View style={styles.topContainer}>
@@ -42,20 +113,21 @@ export default class EditTask extends Component {
 								</View>
 							</TouchableOpacity>              
 						</View>
-				            <View style={styles.header1}><Text style={styles.homeText}>DETAILS</Text></View>
+				            <View style={addStyle.header1}><Text style={styles.homeText}> DETAILS</Text></View>
 			            </View>					
 				</View>
 				<View style={styles.bottomContainer} >
 					<View style={addStyle.TextInputContainer}>
 						<TextInput
 							underlineColorAndroid="transparent"
-							style={addStyle.TextInput}
-							value={this.state.data.task}
-						 />	
-						<TouchableOpacity onPress={this.navigate.bind(this, "chooseCategory")}>
+							onChangeText={(doMe) => this.setText(doMe)}
+							placeholder="Do Me!"
+							value={this.state.doMe}
+							style={addStyle.TextInput} />	
+						<TouchableOpacity onPress={this.navigate.bind(this, "category")}>
 							<View style={addStyle.CategoryPicker}>
-								<View style={styles.header1}>
-									 <Text style={addStyle.TextCategory}></Text> 
+								<View style={addStyle.header1}>
+									 <Text style={addStyle.TextCategory}>{this.state.chosenCategory}</Text> 
 								</View>
 								<View style={styles.header2}>
 										<Text style={addStyle.TextCategory}>
@@ -64,26 +136,74 @@ export default class EditTask extends Component {
 								</View>
 							</View>
 						</TouchableOpacity>
-						<TouchableOpacity onPress={this.navigate.bind(this, "chooseCategory")}>
-							<View style={addStyle.CategoryPicker}>
-								<View style={styles.header1}>
-									 <Text style={addStyle.TextCategory}></Text> 
-								</View>
-								<View style={styles.header2}>
-										<Text style={addStyle.TextCategory}>
-											<Icon style={addStyle.rightArrow} name="chevron-right" size={20} color='black'/>
-										</Text>
-								</View>
+						<View style={addStyle.dateTimeContainer}>
+							<View style={addStyle.switchContainer}>
+							<Text style={addStyle.dateText}>Date and Time</Text>
+							<TouchableHighlight onPress={this.switchChange}>
+						        	<Switch
+						          		onValueChange={(value) => this.switchChange(value)}
+						          		value={this.state.falseSwitchIsOn} />
+					          	</TouchableHighlight>
+					          	</View>
+					          	<View style={addStyle.datePicker}>
+								<DatePicker
+										disabled={this.state.dateDisabled}
+										style={{width: 150}}
+										date={this.state.date}
+										mode="datetime"
+										placeholder="select date"
+										showIcon= {false}
+										format="YYYY-MM-DD HH:mm"
+										minDate={moment().format("YYYY-MM-DD")}
+										maxDate={moment().endOf('month').format('YYYY-MM-DD')}
+										confirmBtnText="Confirm"
+										cancelBtnText="Cancel"
+										customStyles={{
+										dateInput: {
+										}
+										// ... You can check the source to find the other keys. 
+										}}
+										onDateChange = {(date) => this.setDate(date)} />
 							</View>
-						</TouchableOpacity>													 			 						 
+						</View>
+						<View style={addStyle.priorityContainer}>
+							<View style={addStyle.priorityText}>
+								<Text>Priority</Text>
+							</View>
+							<View style={addStyle.buttonGroupContainer}>
+							    	<ButtonGroup
+								      onPress={this.updateIndex}
+								      selectedIndex={selectedIndex}
+								      buttons={buttons}
+								      selectedBackgroundColor =  '#55b7e5'
+								      buttonStyle={{borderLeftWidth: 1, borderColor: 'lightgrey'}}	
+								      containerStyle={{height: 20, borderColor: 'lightgrey'}} />																			 			 						 
+							</View>
+						</View>			
 					</View>
-					<View style={styles.button}>
-						<Button
-						onPress={()=>this.props.editTasks('lol')}
-						title="Save"
-						color="grey"
-						/>
-					</View>				
+					<View style={addStyle.noteContainer}>	
+						<TextInput
+							multiline={true}
+							underlineColorAndroid="transparent"
+							placeholder= "Description"
+							value={this.state.text}
+							onChange={(event) => {
+								this.setState({
+								text: event.nativeEvent.text,
+								height: event.nativeEvent.contentSize.height,
+								});
+							}}							
+							style={[addStyle.Description, {height: Math.max(35, this.state.height)}]} />							
+					</View>																
+					<Button
+						disabled={this.state.buttonDisabled}
+						onPress = {this.addTask}
+						iconRight
+						backgroundColor = '#55b7e5'
+						borderRadius = {5}
+						buttonStyle = {{marginBottom: 10}}
+						fontSize = {25}
+						title='DO ME!' />
 				</View>
 			</View>
 		);

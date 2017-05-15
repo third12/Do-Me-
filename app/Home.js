@@ -134,7 +134,8 @@ class Home extends Component {
     }
 
 	deleteRow(data) {
-		console.log(data.key)
+		this.props.deleteTask(data.key);
+		// console.log(data.key)
 	}
 
 }

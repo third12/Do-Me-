@@ -14,6 +14,7 @@ import Home from './Home.js';
 import EditTask from './EditTask.js';
 import Add from './Add.js';
 import Category from './Category.js';
+import _ from 'underscore';
 
 export default class DoMe extends Component {
 
@@ -38,9 +39,11 @@ export default class DoMe extends Component {
     this.getTasks = this.getTasks.bind(this);      
     this.editTasks = this.editTasks.bind(this);      
     this.saveTask = this.saveTask.bind(this);
+    this.deleteTask = this.deleteTask.bind(this);
   }
 
   componentDidMount() {
+    // AsyncStorage.clear();
     BackAndroid.addEventListener('hardwareBackPress', this.handleBack);
     console.log('lol');
     AsyncStorage.getItem('data').then((value) => {
@@ -51,7 +54,7 @@ export default class DoMe extends Component {
       }else{
       console.log('value');
         this.setState({
-          'tasks': JSON.stringify([{key:1,task:'lol',datetime:'14/23/2013',priority:'3',category:'Acads',notes:'lol',status:'completed'},{key:2,task:'lole',datetime:'14/23/2013',priority:'3',category:'Acads',notes:'lol',status:'completed'}]),
+          'tasks': JSON.stringify([{key:1,task:'lol',datetime:'14/23/2013',priority:'1',category:'Academics',notes:'lol',status:'Completed'},{key:2,task:'lole',datetime:'14/23/2013',priority:'2',category:'Academics',notes:'lol',status:'Completed'}]),
         })        
         console.log(this.state.tasks);
       }
@@ -88,7 +91,7 @@ export default class DoMe extends Component {
   renderScene(route, navigator) {
     console.log(route);
     if(route.name == 'Home') {
-      return <Home navigator={navigator} getTasks={this.getTasks} />
+      return <Home navigator={navigator} getTasks={this.getTasks} deleteTask={this.deleteTask}/>
     }
     if(route.name == 'EditTask') {
       return <EditTask navigator={navigator} data={route.data} editTasks={this.editTasks}/>
@@ -106,7 +109,7 @@ export default class DoMe extends Component {
   }
 
   editTasks(data){
-    console.log(data);
+    console.log(data.task);
   }
 
   saveTask(task){
@@ -114,12 +117,26 @@ export default class DoMe extends Component {
     let tasks = this.state.tasks;
     tasks = JSON.parse(tasks);
     latestKey = tasks[tasks.length-1].key;
-    task.key = latestKey++;
+    task.key = latestKey+1;
     tasks.push(task);
     AsyncStorage.setItem('data', JSON.stringify(tasks));
     this.setState({
       tasks:JSON.stringify(tasks),
     });
+  }
+
+  deleteTask(key){
+    console.log(key);
+    let tasks = this.state.tasks;
+    tasks = JSON.parse(tasks);
+    tasks = _.without(tasks, _.findWhere(tasks, {
+      key: key
+    }));
+    // console.log(tasks);
+    AsyncStorage.setItem('data', JSON.stringify(tasks));
+    this.setState({
+      tasks:JSON.stringify(tasks),
+    });    
   }
 
 }

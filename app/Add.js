@@ -88,17 +88,16 @@ export default class Add extends Component{
 	}
 
 	addTask(){
-
 		task = {
 			key: 0,
 			task: this.state.doMe,
 			category: this.state.chosenCategory,
-			dateTime: this.state.dateSelected,
+			datetime: this.state.dateSelected,
 			priority: this.state.selectedIndex,
-			status: "incomplete",
+			status: "Incomplete",
 		}
-
 		this.props.saveTask(task);
+		this.props.navigator.pop();
 	}
 
 	render(){
