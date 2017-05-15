@@ -37,7 +37,7 @@ export default class DoMe extends Component {
     }).bind(this)
 
     this.getTasks = this.getTasks.bind(this);      
-    this.editTasks = this.editTasks.bind(this);      
+    this.editTask = this.editTask.bind(this);      
     this.saveTask = this.saveTask.bind(this);
     this.deleteTask = this.deleteTask.bind(this);
   }
@@ -54,7 +54,7 @@ export default class DoMe extends Component {
       }else{
       console.log('value');
         this.setState({
-          'tasks': JSON.stringify([{key:1,task:'lol',datetime:'14/23/2013',priority:'1',category:'Academics',notes:'lol',status:'Completed'},{key:2,task:'lole',datetime:'14/23/2013',priority:'2',category:'Academics',notes:'lol',status:'Completed'}]),
+          'tasks': JSON.stringify([{key:1,task:'lol',dateTime:'14/23/2013',priority:'1',category:'Academics',notes:'lol',status:'Completed'},{key:2,task:'lole',dateTime:'14/23/2013',priority:'2',category:'Academics',notes:'lol',status:'Completed'}]),
         })        
         console.log(this.state.tasks);
       }
@@ -94,7 +94,7 @@ export default class DoMe extends Component {
       return <Home navigator={navigator} getTasks={this.getTasks} deleteTask={this.deleteTask}/>
     }
     if(route.name == 'EditTask') {
-      return <EditTask navigator={navigator} data={route.data} editTasks={this.editTasks}/>
+      return <EditTask navigator={navigator} data={route.data} editTask={this.editTask}/>
     }
     if(route.name == 'add') {
       return <Add navigator={navigator} saveTask={this.saveTask}/>
@@ -108,8 +108,21 @@ export default class DoMe extends Component {
     return this.state.tasks;
   }
 
-  editTasks(data){
-    console.log(data.task);
+  editTask(task){
+    let tasks = this.state.tasks;
+    tasks = JSON.parse(tasks);
+    var match = _.findWhere(tasks, {key:task.key});
+    if (match) {
+      match.task = task.task;
+      match.category = task.category;
+      match.dateTime = task.dateTime;
+      match.priority = task.priority;
+      match.status = task.status;
+    }
+    AsyncStorage.setItem('data', JSON.stringify(tasks));
+    this.setState({
+      tasks:JSON.stringify(tasks),
+    });    
   }
 
   saveTask(task){

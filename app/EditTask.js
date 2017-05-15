@@ -46,7 +46,7 @@ export default class EditTask extends Component{
 		this.updateIndex = this.updateIndex.bind(this);
 		this.setCategory = this.setCategory.bind(this);
 		this.setText = this.setText.bind(this);
-		this.addTask = this.addTask.bind(this);
+		this.setTask = this.setTask.bind(this);
 		this.setDate = this.setDate.bind(this);
 	}
 
@@ -86,22 +86,23 @@ export default class EditTask extends Component{
 		this.setState({dateSelected: date});
 	}
 
-	addTask(){
+	setTask(){
 		task = {
 			key: this.props.data.key,
 			task: this.state.doMe,
 			category: this.state.chosenCategory,
 			dateTime: this.state.dateSelected,
 			priority: this.state.selectedIndex,
+			notes: this.state.text,
 			status: "Incomplete",
 		}
-		console.log(task);
+		this.props.editTask(task);
 		this.props.navigator.pop();
 	}
 
 	render(){
 		const buttons = ['!', '!!', '!!!'];
-		const { selectedIndex } = this.state;
+		const { selectedIndex } = this.state.selectedIndex;
 		return(
 			<View style={styles.parent}>
 				<View style={styles.topContainer}>
@@ -197,7 +198,7 @@ export default class EditTask extends Component{
 					</View>																
 					<Button
 						disabled={this.state.buttonDisabled}
-						onPress = {this.addTask}
+						onPress = {this.setTask}
 						iconRight
 						backgroundColor = '#55b7e5'
 						borderRadius = {5}

@@ -92,8 +92,9 @@ export default class Add extends Component{
 			key: 0,
 			task: this.state.doMe,
 			category: this.state.chosenCategory,
-			datetime: this.state.dateSelected,
+			dateTime: this.state.dateSelected,
 			priority: this.state.selectedIndex,
+			notes: this.state.text,
 			status: "Incomplete",
 		}
 		this.props.saveTask(task);
