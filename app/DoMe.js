@@ -35,10 +35,8 @@ export default class DoMe extends Component {
       return false; //close the app
     }).bind(this)
 
-    this.saveCategory = this.saveCategory.bind(this);      
     this.getTasks = this.getTasks.bind(this);      
     this.editTasks = this.editTasks.bind(this);      
-    this.getCategories = this.getCategories.bind(this);
     this.saveTask = this.saveTask.bind(this);
   }
 
@@ -111,21 +109,16 @@ export default class DoMe extends Component {
     console.log(data);
   }
 
-  getCategories(){
-    return this.state.categories;
-  }
-
-  saveTask(data){
-    console.log(data);
-  }
-
-  saveCategory(category){
-    let categories = this.state.categories;
-    categories = JSON.parse(categories);
-    categories.push(category);
-    AsyncStorage.setItem('categorydata', JSON.stringify(categories));
+  saveTask(task){
+    // console.log(task);
+    let tasks = this.state.tasks;
+    tasks = JSON.parse(tasks);
+    latestKey = tasks[tasks.length-1].key;
+    task.key = latestKey++;
+    tasks.push(task);
+    AsyncStorage.setItem('data', JSON.stringify(tasks));
     this.setState({
-      categories:JSON.stringify(categories),
+      tasks:JSON.stringify(tasks),
     });
   }
 
