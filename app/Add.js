@@ -15,8 +15,6 @@ import{
 	TextInput
 }	from 'react-native';
 
-import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
-import CheckBox from 'react-native-check-box'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './styles/homeStyles.js';
 import addStyle from './styles/addStyles.js';
@@ -27,37 +25,82 @@ import { Button, ButtonGroup } from 'react-native-elements';
 export default class Add extends Component{
 	navigate(routeName){
 		this.props.navigator.push({
-			name: routeName
+			name: routeName,
+			setCategory: this.setCategory,
 		});
 	}
 	constructor(props){
 		super(props);
 		this.state = {
 			selectedIndex: 0,
-			chosenCategory: 'Category',
-			chosenDate: 'Date',
-			note: ' ',
+			chosenCategory: 'Academics',
 			doMe: 'Do Me!',
-			text: 'Description', height: 0,
+			text: ' ',
+			height: 0,
+			dateSelected: ' ',
 			date: moment().format("YYYY-MM-DD HH:mm"),
 			falseSwitchIsOn: false,	
 			dateDisabled: true,
+			buttonDisabled: true,
 		}
 		this.switchChange = this.switchChange.bind(this);
-		this.updateIndex = this.updateIndex.bind(this);	
+		this.updateIndex = this.updateIndex.bind(this);
+		this.setCategory = this.setCategory.bind(this);
+		this.setText = this.setText.bind(this);
+		this.addTask = this.addTask.bind(this);
+		this.setDate = this.setDate.bind(this);
 	}
+
 	updateIndex (selectedIndex) {
 		this.setState({selectedIndex})
+		console.log(selectedIndex);
 	}
+
 	switchChange(value){
 		this.setState({falseSwitchIsOn:value});
 		if(value == true){
+			this.setState({dateSelected: this.state.date});			
 			this.setState({dateDisabled: false});
 		}
 		else{
+			this.setState({dateSelected: ' '});	
 			this.setState({dateDisabled: true});
 		}
 	}
+
+	setCategory(item){
+		this.setState({chosenCategory: item});
+	}
+
+	setText(text){
+		if(text.length == 0){
+			this.setState({buttonDisabled: true});
+		}
+		else{
+			this.setState({doMe: text});
+			this.setState({buttonDisabled: false});
+		}
+	}
+
+	setDate(date){
+		this.setState({date: date});
+		this.setState({dateSelected: date});
+	}
+
+	addTask(){
+
+		task = {
+			key: 0,
+			task: this.state.doMe,
+			category: this.state.chosenCategory,
+			dateTime: this.state.dateSelected,
+			priority: this.state.selectedIndex,
+			status: "incomplete",
+		}
+
+		this.props.saveTask(task);
+	}
+
 	render(){
 		const buttons = ['!', '!!', '!!!'];
 		const { selectedIndex } = this.state;
@@ -79,10 +122,10 @@ export default class Add extends Component{
 					<View style={addStyle.TextInputContainer}>
 						<TextInput
 							underlineColorAndroid="transparent"
-							onChangeText={(doMe) => this.setState({doMe})}
-							value={this.state.doMe}
+							onChangeText={(doMe) => this.setText(doMe)}
+							placeholder="Do Me!"
 							style={addStyle.TextInput} />	
-						<TouchableOpacity onPress={this.navigate.bind(this, "chooseCategory")}>
+						<TouchableOpacity onPress={this.navigate.bind(this, "category")}>
 							<View style={addStyle.CategoryPicker}>
 								<View style={addStyle.header1}>
 									 <Text style={addStyle.TextCategory}>{this.state.chosenCategory}</Text> 
@@ -121,7 +164,7 @@ export default class Add extends Component{
 										}
 										// ... You can check the source to find the other keys. 
 										}}
-										onDateChange={(date) => {this.setState({date: date})}} />
+										onDateChange = {(date) => this.setDate(date)} />
 							</View>
 						</View>
 						<View style={addStyle.priorityContainer}>
@@ -143,7 +186,7 @@ export default class Add extends Component{
 						<TextInput
 							multiline={true}
 							underlineColorAndroid="transparent"
-							value={this.state.text}
+							placeholder= "Description"
 							onChange={(event) => {
 								this.setState({
 								text: event.nativeEvent.text,
@@ -153,6 +196,8 @@ export default class Add extends Component{
 							style={[addStyle.Description, {height: Math.max(35, this.state.height)}]} />							
 					</View>																
 					<Button
+						disabled={this.state.buttonDisabled}
+						onPress = {this.addTask}
 						iconRight
 						backgroundColor = '#55b7e5'
 						borderRadius = {5}

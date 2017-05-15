@@ -13,6 +13,7 @@ import {
 import Home from './Home.js';
 import EditTask from './EditTask.js';
 import Add from './Add.js';
+import Category from './Category.js';
 
 export default class DoMe extends Component {
 
@@ -37,7 +38,8 @@ export default class DoMe extends Component {
     this.saveCategory = this.saveCategory.bind(this);      
     this.getTasks = this.getTasks.bind(this);      
     this.editTasks = this.editTasks.bind(this);      
-    this.getCategories = this.getCategories.bind(this);      
+    this.getCategories = this.getCategories.bind(this);
+    this.saveTask = this.saveTask.bind(this);
   }
 
   componentDidMount() {
@@ -91,12 +93,14 @@ export default class DoMe extends Component {
       return <Home navigator={navigator} getTasks={this.getTasks} />
     }
     if(route.name == 'EditTask') {
-      // console.log(route.data);
       return <EditTask navigator={navigator} data={route.data} editTasks={this.editTasks}/>
     }
     if(route.name == 'add') {
-      return <Add navigator={navigator} />
+      return <Add navigator={navigator} saveTask={this.saveTask}/>
     }
+    if(route.name == 'category') {
+      return <Category navigator={navigator} setCategory={route.setCategory} />
+    }    
   }
 
   getTasks(){
@@ -111,11 +115,14 @@ export default class DoMe extends Component {
     return this.state.categories;
   }
 
+  saveTask(data){
+    console.log(data);
+  }
+
   saveCategory(category){
     let categories = this.state.categories;
     categories = JSON.parse(categories);
     categories.push(category);
-    // console.log(category);
     AsyncStorage.setItem('categorydata', JSON.stringify(categories));
     this.setState({
       categories:JSON.stringify(categories),

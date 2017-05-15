@@ -87,6 +87,17 @@ var addStyle = StyleSheet.create({
 		marginBottom: 25,
 		marginRight: 10,
 	},
+	categories: {
+		margin: 5,
+		color: 'black',
+		fontSize: 15,		
+	},
+	categoryExpenses: {
+		flex: 0,
+		flexDirection: 'row',
+		borderBottomWidth: 1,
+		borderBottomColor: 'black',
+	},	
 });
 
 module.exports = addStyle;
