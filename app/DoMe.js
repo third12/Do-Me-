@@ -54,7 +54,7 @@ export default class DoMe extends Component {
       }else{
       console.log('value');
         this.setState({
-          'tasks': JSON.stringify([{key:1,task:'lol',dateTime:'14/23/2013',priority:'1',category:'Academics',notes:'lol',status:'Completed'},{key:2,task:'lole',dateTime:'14/23/2013',priority:'2',category:'Academics',notes:'lol',status:'Completed'}]),
+          'tasks': JSON.stringify([{key:1,task:'lol',dateTime:'2017-05-18 02:51',priority:'1',category:'Academics',notes:'lol',checked:false},{key:2,task:'lole',dateTime:'2017-05-15 02:51',priority:'2',category:'Academics',notes:'lol',checked:true}]),
         })        
         console.log(this.state.tasks);
       }
@@ -91,7 +91,7 @@ export default class DoMe extends Component {
   renderScene(route, navigator) {
     console.log(route);
     if(route.name == 'Home') {
-      return <Home navigator={navigator} getTasks={this.getTasks} deleteTask={this.deleteTask}/>
+      return <Home navigator={navigator} getTasks={this.getTasks} deleteTask={this.deleteTask} editTask={this.editTask}/>
     }
     if(route.name == 'EditTask') {
       return <EditTask navigator={navigator} data={route.data} editTask={this.editTask}/>
@@ -117,7 +117,7 @@ export default class DoMe extends Component {
       match.category = task.category;
       match.dateTime = task.dateTime;
       match.priority = task.priority;
-      match.status = task.status;
+      match.checked = task.checked;
     }
     AsyncStorage.setItem('data', JSON.stringify(tasks));
     this.setState({

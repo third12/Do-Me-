@@ -37,7 +37,7 @@ export default class EditTask extends Component{
 			text: this.props.data.notes,
 			height: 0,
 			dateSelected: this.props.data.datetime,
-			date: this.props.data.datetime,
+			date: this.props.data.dateTime,
 			falseSwitchIsOn: false,	
 			dateDisabled: true,
 			buttonDisabled: false,
@@ -94,7 +94,7 @@ export default class EditTask extends Component{
 			dateTime: this.state.dateSelected,
 			priority: this.state.selectedIndex,
 			notes: this.state.text,
-			status: "Incomplete",
+			checked: this.props.data.checked,
 		}
 		this.props.editTask(task);
 		this.props.navigator.pop();
@@ -102,7 +102,7 @@ export default class EditTask extends Component{
 
 	render(){
 		const buttons = ['!', '!!', '!!!'];
-		const { selectedIndex } = this.state.selectedIndex;
+		const { selectedIndex } = this.state;
 		return(
 			<View style={styles.parent}>
 				<View style={styles.topContainer}>

@@ -121,8 +121,8 @@ class Home extends Component {
 			<View style={styles.rowFront}>
 				<CheckBox
 				    style={{padding: 10}}
-				    onClick={()=>this.onClick(data.task)}
-				    isChecked={false}
+				    onClick={()=>this.onClick(data)}
+				    isChecked={data.checked}
 				    rightText={data.task}
 				/>
 			</View>
@@ -131,6 +131,8 @@ class Home extends Component {
 
     onClick(data) {
         data.checked = !data.checked;
+        console.log(data);
+		this.props.editTask(data);
     }
 
 	deleteRow(data) {

@@ -37,7 +37,7 @@ export default class Add extends Component{
 			doMe: 'Do Me!',
 			text: ' ',
 			height: 0,
-			dateSelected: ' ',
+			dateSelected: '',
 			date: moment().format("YYYY-MM-DD HH:mm"),
 			falseSwitchIsOn: false,	
 			dateDisabled: true,
@@ -63,7 +63,7 @@ export default class Add extends Component{
 			this.setState({dateDisabled: false});
 		}
 		else{
-			this.setState({dateSelected: ' '});	
+			this.setState({dateSelected: ''});	
 			this.setState({dateDisabled: true});
 		}
 	}
@@ -83,6 +83,7 @@ export default class Add extends Component{
 	}
 
 	setDate(date){
+		console.log(date);
 		this.setState({date: date});
 		this.setState({dateSelected: date});
 	}
@@ -95,7 +96,7 @@ export default class Add extends Component{
 			dateTime: this.state.dateSelected,
 			priority: this.state.selectedIndex,
 			notes: this.state.text,
-			status: "Incomplete",
+			checked: false,
 		}
 		this.props.saveTask(task);
 		this.props.navigator.pop();
