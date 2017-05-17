@@ -15,7 +15,8 @@ import {
 
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
 import ModalPicker from 'react-native-modal-picker';
-import CheckBox from 'react-native-check-box'
+import CheckBox from 'react-native-check-box';
+import _ from 'underscore';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './styles/homeStyles.js';
 class Home extends Component {
@@ -30,8 +31,10 @@ class Home extends Component {
 		this.state = {
 			tasks: null,
 	        dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
+	        title: "DO ME!"
 		};
-		this.renderRow = this.renderRow.bind(this);      
+		this.renderRow = this.renderRow.bind(this);
+		this.selectCategory= this.selectCategory.bind(this);          
 	}
 
 	componentWillMount(){
@@ -55,11 +58,23 @@ class Home extends Component {
 		}
 	}
 
+	selectCategory(category){
+		var array = JSON.parse(this.props.getTasks());
+		var getByCategory = _.where(array, {category: category});
+		this.setState({
+			dataSource: this.state.dataSource.cloneWithRows(getByCategory),  
+			title:category,
+	    });
+
+	}
+
 	render() {
 		let index = 0;
         const data = [
             { key: index++, section: true, label: 'Category' },
             { key: index++, label: 'Academics' },
+            { key: index++, label: 'Personal' },
+            { key: index++, label: 'Organization' },
             { key: index++, label: 'Shopping' },
             { key: index++, label: 'Work' },
         ];
@@ -76,14 +91,14 @@ class Home extends Component {
 					</TouchableOpacity>              
 				</View>
 
-	            <View style={styles.header1}><Text style={styles.homeText}>DO ME !</Text>
+	            <View style={styles.header1}><Text style={styles.homeText}>{this.state.title}</Text>
 
 	            </View>
 
 	            <View style={styles.header2}>
 	            	<ModalPicker
 	                    data={data}
-	                    onChange={(option)=>{ alert(`Category changed to:  ${option.label}`) }}
+	                    onChange={(option)=>{ this.selectCategory(`${option.label}`) }}
 	                    style={styles.modalBackground}>
 	                    <Icon style={styles.caretIcon} name="caret-down" size={20} color="white" />
 	                </ModalPicker>
