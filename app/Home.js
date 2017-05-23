@@ -19,6 +19,18 @@ import CheckBox from 'react-native-check-box';
 import _ from 'underscore';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './styles/homeStyles.js';
+import PushNotification from 'react-native-push-notification'
+
+PushNotification.configure({
+
+    // (required) Called when a remote or local notification is opened or received
+    onNotification: function(notification) {
+        console.log( 'NOTIFICATION:', notification );
+    },
+
+});
+
+
 class Home extends Component {
 	navigate(routeName,data){
 		this.props.navigator.push({

@@ -15,6 +15,18 @@ import EditTask from './EditTask.js';
 import Add from './Add.js';
 import Category from './Category.js';
 import _ from 'underscore';
+import moment from 'moment';
+import PushNotification from 'react-native-push-notification'
+
+PushNotification.configure({
+
+    // (required) Called when a remote or local notification is opened or received
+    onNotification: function(notification) {
+        console.log( 'NOTIFICATION:', notification );
+    },
+
+});
+
 
 export default class DoMe extends Component {
 
@@ -118,6 +130,14 @@ export default class DoMe extends Component {
       match.dateTime = task.dateTime;
       match.priority = task.priority;
       match.checked = task.checked;
+
+      if(task.dateTime!=undefined){
+        PushNotification.localNotificationSchedule({
+          id: task.key,
+          message: task.task,
+          date: moment(task.dateTime,'YYYY-MM-DD HH:mm').toDate(),
+        });
+      }
     }
     AsyncStorage.setItem('data', JSON.stringify(tasks));
     this.setState({
@@ -132,6 +152,19 @@ export default class DoMe extends Component {
     latestKey = tasks[tasks.length-1].key;
     task.key = latestKey+1;
     tasks.push(task);
+
+    // date: new Date(Date.now() + (5 * 1000))
+    if(task.dateTime!=undefined){
+      PushNotification.localNotificationSchedule({
+        id: task.key.toString(),
+        userInfo: {
+          id: task.key.toString(),
+        },
+        message: task.task,
+        date: moment(task.dateTime,'YYYY-MM-DD HH:mm').toDate(),
+      });
+    }
+
     AsyncStorage.setItem('data', JSON.stringify(tasks));
     this.setState({
       tasks:JSON.stringify(tasks),
@@ -146,6 +179,9 @@ export default class DoMe extends Component {
       key: key
     }));
     // console.log(tasks);
+
+    PushNotification.cancelLocalNotifications({id: key.toString()});
+
     AsyncStorage.setItem('data', JSON.stringify(tasks));
     this.setState({
       tasks:JSON.stringify(tasks),
