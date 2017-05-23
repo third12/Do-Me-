@@ -13,7 +13,7 @@ var addStyle = StyleSheet.create({
 	},	
 	TextInput: {
 		borderWidth: 1,
-		borderColor: 'black',
+		borderColor: '#55b7e5',
 		marginLeft: 10,
 		marginRight: 10,
 		marginTop: 10,
@@ -23,7 +23,7 @@ var addStyle = StyleSheet.create({
 	},
 	Description: {
 		borderWidth: 1,
-		borderColor: 'black',
+		borderColor: '#55b7e5',
 		marginLeft: 10,
 		marginRight: 10,
 		marginTop: 10,
@@ -33,7 +33,7 @@ var addStyle = StyleSheet.create({
 	},
 	CategoryPicker: {
 		borderWidth: 1,
-		borderColor: 'black',
+		borderColor: '#55b7e5',
 		flex: 0,
 		flexDirection: 'row',    
 		marginLeft: 10,
@@ -43,6 +43,7 @@ var addStyle = StyleSheet.create({
 		height: 35
 	},
 	TextCategory: {
+		marginTop: 7,
 		margin: 4,
 		color: 'grey',
 	},
@@ -96,7 +97,7 @@ var addStyle = StyleSheet.create({
 		flex: 0,
 		flexDirection: 'row',
 		borderBottomWidth: 1,
-		borderBottomColor: 'black',
+		borderBottomColor: '#55b7e5',
 	},	
 });
 
