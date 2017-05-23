@@ -60,23 +60,44 @@ class Home extends Component {
 
 	selectCategory(category){
 		var array = JSON.parse(this.props.getTasks());
-		var getByCategory = _.where(array, {category: category});
-		this.setState({
-			dataSource: this.state.dataSource.cloneWithRows(getByCategory),  
-			title:category,
-	    });
 
+		console.log(category);
+		if(category=="DO ME!"){
+			var unchecked = _.where(array, {checked:false});
+			var getByPriority = _.sortBy(unchecked, 'priority').reverse();
+			let newArray = this.state.dataSource;
+			this.setState({
+				dataSource: this.state.dataSource.cloneWithRows(getByPriority),  
+				title:category,
+		    });
+
+		} else if(category=="Completed"){
+			var getCompleted = _.where(array, {checked:true});
+			this.setState({
+				dataSource: this.state.dataSource.cloneWithRows(getCompleted),  
+				title:category,
+		    });
+
+		} else{
+			var getByCategory = _.where(array, {category: category, checked:false});
+			this.setState({
+				dataSource: this.state.dataSource.cloneWithRows(getByCategory),  
+				title:category,
+		    });
+		}
 	}
 
 	render() {
 		let index = 0;
         const data = [
             { key: index++, section: true, label: 'Category' },
+            { key: index++, label: 'DO ME!' },
             { key: index++, label: 'Academics' },
             { key: index++, label: 'Personal' },
             { key: index++, label: 'Organization' },
             { key: index++, label: 'Shopping' },
             { key: index++, label: 'Work' },
+            { key: index++, label: 'Completed' },
         ];
 
 		return (	
@@ -132,9 +153,9 @@ class Home extends Component {
 
 	renderRow(data){
 		return (
-
 			<View style={styles.rowFront}>
 				<CheckBox
+					key={data.key}
 				    style={{padding: 10}}
 				    onClick={()=>this.onClick(data)}
 				    isChecked={data.checked}
