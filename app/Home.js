@@ -39,22 +39,19 @@ class Home extends Component {
 
 	componentWillMount(){
 		if(this.props.getTasks()!=null){
-			var array = JSON.parse(this.props.getTasks());
 		    this.setState({
 				tasks: this.props.getTasks(),
-				dataSource: this.state.dataSource.cloneWithRows(array),  
 		    });
+			this.selectCategory(this.state.title);
 		}
 	}
 
 	componentDidUpdate(prevProps, prevState) {
 	    if(this.state.tasks!=this.props.getTasks()){
-			var array = JSON.parse(this.props.getTasks());
-			console.log(array);
 		    this.setState({
 				tasks: this.props.getTasks(),
-				dataSource: this.state.dataSource.cloneWithRows(array),  
 		    });
+			this.selectCategory(this.state.title);
 		}
 	}
 
@@ -65,7 +62,6 @@ class Home extends Component {
 		if(category=="DO ME!"){
 			var unchecked = _.where(array, {checked:false});
 			var getByPriority = _.sortBy(unchecked, 'priority').reverse();
-			let newArray = this.state.dataSource;
 			this.setState({
 				dataSource: this.state.dataSource.cloneWithRows(getByPriority),  
 				title:category,
@@ -129,7 +125,8 @@ class Home extends Component {
           </View>
           
           <View style={styles.bottomContainer} >
-				<SwipeListView
+				<SwipeListView 
+				enableEmptySections={true}
 				dataSource={this.state.dataSource}
 				renderRow={(rowData) => this.renderRow(rowData)}
 				renderHiddenRow={ data => (
