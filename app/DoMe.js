@@ -131,12 +131,15 @@ export default class DoMe extends Component {
       match.priority = task.priority;
       match.checked = task.checked;
 
-      if(task.dateTime!=undefined){
+      if(task.dateTime!=undefined && task.checked==false){
         PushNotification.localNotificationSchedule({
-          id: task.key,
+          id: task.key.toString(),
           message: task.task,
           date: moment(task.dateTime,'YYYY-MM-DD HH:mm').toDate(),
         });
+      }
+      if(task.checked==true){
+        PushNotification.cancelLocalNotifications({id: task.key.toString()});
       }
     }
     AsyncStorage.setItem('data', JSON.stringify(tasks));
